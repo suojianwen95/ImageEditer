@@ -242,7 +242,6 @@
             // clipPanel
             // 
             this.clipPanel.BackColor = System.Drawing.Color.Transparent;
-            this.clipPanel.Cursor = System.Windows.Forms.Cursors.Default;
             this.clipPanel.Location = new System.Drawing.Point(80, 9);
             this.clipPanel.Name = "clipPanel";
             this.clipPanel.Size = new System.Drawing.Size(27, 30);

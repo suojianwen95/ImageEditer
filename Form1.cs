@@ -21,6 +21,7 @@ namespace ImageEditer
         private static float zoomNum = 1.0f; // 缩放比例 未使用
         private static int pointRadis = 12; // 裁切点大小
         private static Boolean clipMode = false; // 是否开启裁切
+        private static Boolean textMode = false; // 是否开启标注
 
         private static Pen rotaPen = new Pen(Color.Blue, 10); // 旋转颜色 未使用
         private static Pen clipPen = new Pen(Color.Red, 10); // 裁切颜色
@@ -93,7 +94,6 @@ namespace ImageEditer
             currentPictureBox.MouseDown += new System.Windows.Forms.MouseEventHandler(this.pictureBox_MouseDown);
             currentPictureBox.MouseMove += new System.Windows.Forms.MouseEventHandler(this.pictureBox_MouseMove);
             currentPictureBox.MouseUp += new System.Windows.Forms.MouseEventHandler(this.pictureBox_MouseUp);
-
             /************************裁切框组件**************************/
            
             OneButton.Size = new Size(pointRadis, pointRadis);
@@ -181,8 +181,8 @@ namespace ImageEditer
                     currentPictureBox.Height = (int)scaleHeight;
                 }
                 else {
-                    currentPictureBox.Width = (int)windowWidth;
-                    currentPictureBox.Height = (int)windowHeight;
+                    currentPictureBox.Width = currentPictureBox.Image.Width;
+                    currentPictureBox.Height = currentPictureBox.Image.Height;
                 }
             }
             else
@@ -194,8 +194,8 @@ namespace ImageEditer
                     currentPictureBox.Width = (int)scaleWidth;
                 }
                 else {
-                    currentPictureBox.Width = (int)windowWidth;
-                    currentPictureBox.Height = (int)windowHeight;
+                    currentPictureBox.Width = currentPictureBox.Image.Width;
+                    currentPictureBox.Height = currentPictureBox.Image.Height;
                 }
 
             }
@@ -209,7 +209,7 @@ namespace ImageEditer
         private void reset_Click(object sender, EventArgs e)
         {
             rotaNum = 0;
-            resetImageToPanel();
+            resetImageToPanel(); 
         }
         // 左旋
         private void roatleft_Click(object sender, EventArgs e)
@@ -246,8 +246,9 @@ namespace ImageEditer
         // 裁切
         private void clip_Click(object sender, EventArgs e)
         {
+            textMode = false;
             clipMode = !clipMode;
-
+            
             if (clipMode)
             {
                 this.clip.BackColor = Color.Blue;
@@ -266,7 +267,7 @@ namespace ImageEditer
         // 插入文字
         private void import_Click(object sender, EventArgs e)
         {
-
+            textMode = true;
         }
         // 导出图像
         private void export_Click(object sender, EventArgs e)
@@ -292,8 +293,6 @@ namespace ImageEditer
                 currentPictureBox.Focus();
 
                 float zoomChange = e.Delta > 0 ? 2f : 0.5f;
-
-                // Debug.WriteLine(e.Delta);
 
                 // 计算缩放后图片的大小 
                 int newWidth = (int)(currentPictureBox.Width * zoomChange);
@@ -323,29 +322,35 @@ namespace ImageEditer
         {
             if (e.Button == MouseButtons.Left)
             {
-                mouseDownPoint.X = Cursor.Position.X;
-                mouseDownPoint.Y = Cursor.Position.Y;
-                isSelected = true;
+                if (textMode)
+                {
+                    Cursor.Current = Cursors.Cross;
+                }
+                else {
+                    Cursor.Current = Cursors.SizeAll;
+                    mouseDownPoint.X = Cursor.Position.X;
+                    mouseDownPoint.Y = Cursor.Position.Y;
+                    isSelected = true; 
+                }
             }
         }
         private void pictureBox_MouseMove(object sender, MouseEventArgs e)
         {
-            if (isSelected)//确定已经激发MouseDown事件，和鼠标在picturebox的范围内
+            if (textMode) { 
+               
+            }
+            else if (isSelected)
             {
                 currentPictureBox.Left = currentPictureBox.Left + (Cursor.Position.X - mouseDownPoint.X);
                 currentPictureBox.Top = currentPictureBox.Top + (Cursor.Position.Y - mouseDownPoint.Y);
                 mouseDownPoint.X = Cursor.Position.X;
-                mouseDownPoint.Y = Cursor.Position.Y;
-                Cursor.Current = Cursors.SizeAll;
-            }
-            else
-            {
-                Cursor.Current = Cursors.Default;
+                mouseDownPoint.Y = Cursor.Position.Y;  
             }
         }
         private void pictureBox_MouseUp(object sender, MouseEventArgs e)
         {
             isSelected = false;
+            textMode = false;
         }
         /*************************裁切平面鼠标事件*************************/
         private void clip_MouseDown(object sender, MouseEventArgs e)
@@ -387,20 +392,19 @@ namespace ImageEditer
         }
         /*************************第一个点鼠标事件*************************/
         private void One_MouseDown(object sender, MouseEventArgs e) {
-            Cursor.Current = Cursors.SizeNS;
             if (e.Button == MouseButtons.Left)
             {
                 mouseDownPoint.X = Cursor.Position.X;
                 mouseDownPoint.Y = Cursor.Position.Y;
+                Cursor.Current = Cursors.SizeNS;
                 isClickedOne = true;
             }
         }
         private void One_MouseMove(object sender, MouseEventArgs e)
         {
             if (isClickedOne) {
-                Cursor.Current = Cursors.SizeNS;
+               
                 int dotaY = mouseDownPoint.Y - Cursor.Position.Y;
-
                 if (ThreeButton.Location.Y - OneButton.Location.Y  > 50 || dotaY > 0) {
 
                     // 计算高度和位置
@@ -422,15 +426,14 @@ namespace ImageEditer
         }
         private void One_MouseUp(object sender, MouseEventArgs e)
         {
-            Cursor.Current = Cursors.Default;
             isClickedOne = false;
         }
         /*************************第二个点鼠标事件*************************/
         private void Two_MouseDown(object sender, MouseEventArgs e)
         {
-            Cursor.Current = Cursors.SizeWE;
             if (e.Button == MouseButtons.Left)
             {
+                Cursor.Current = Cursors.SizeWE;
                 mouseDownPoint.X = Cursor.Position.X;
                 mouseDownPoint.Y = Cursor.Position.Y;
                 isClickedTwo = true;
@@ -439,8 +442,6 @@ namespace ImageEditer
         }
         private void Two_MouseMove(object sender, MouseEventArgs e)
         {
-            Cursor.Current = Cursors.SizeWE;
-
             if (isClickedTwo)
             {
                 int dotaX = mouseDownPoint.X - Cursor.Position.X;
@@ -462,7 +463,6 @@ namespace ImageEditer
         }
         private void Two_MouseUp(object sender, MouseEventArgs e)
         {
-            Cursor.Current = Cursors.Default;
             isClickedTwo = false;
         }
         /*************************第三个点鼠标事件*************************/
@@ -470,6 +470,7 @@ namespace ImageEditer
         {
             if (e.Button == MouseButtons.Left)
             {
+                Cursor.Current = Cursors.SizeNS;
                 mouseDownPoint.X = Cursor.Position.X;
                 mouseDownPoint.Y = Cursor.Position.Y;
                 isClickedThree = true;
@@ -477,7 +478,6 @@ namespace ImageEditer
         }
         private void Three_MouseMove(object sender, MouseEventArgs e)
         {
-            Cursor.Current = Cursors.SizeNS;
             if (isClickedThree)
             {
                 int dotaY = mouseDownPoint.Y - Cursor.Position.Y;
@@ -499,15 +499,14 @@ namespace ImageEditer
         }
         private void Three_MouseUp(object sender, MouseEventArgs e)
         {
-            Cursor.Current = Cursors.Default;
             isClickedThree = false;
         }
         /*************************第四个点鼠标事件*************************/
         private void Four_MouseDown(object sender, MouseEventArgs e)
-        {
-            Cursor.Current = Cursors.SizeWE;
+        {    
             if (e.Button == MouseButtons.Left)
             {
+                Cursor.Current = Cursors.SizeWE;
                 mouseDownPoint.X = Cursor.Position.X;
                 mouseDownPoint.Y = Cursor.Position.Y;
                 isClickedFour = true;
@@ -515,7 +514,6 @@ namespace ImageEditer
         }
         private void Four_MouseMove(object sender, MouseEventArgs e)
         {
-            Cursor.Current = Cursors.SizeWE;
             if (isClickedFour)
             {
                 // 计算宽度和位置
@@ -539,7 +537,6 @@ namespace ImageEditer
         }
         private void Four_MouseUp(object sender, MouseEventArgs e)
         {
-            Cursor.Current = Cursors.Default;
             isClickedFour = false;
         }
         /***************************功能方法***********************/
@@ -617,10 +614,15 @@ namespace ImageEditer
             Image srcImage = currentPictureBox.Image;
             int X = currentClipPanel.Location.X - currentPictureBox.Location.X;
             int Y = currentClipPanel.Location.Y - currentPictureBox.Location.Y;
+
+            int crossWidth = X < 0 ? currentClipPanel.Width + X: currentClipPanel.Width;
+            int crossHeight = Y < 0 ? currentClipPanel.Height + Y : currentClipPanel.Width;
+
+            int Width = crossWidth * srcImage.Width / currentPictureBox.Width;
+            int Height = crossHeight * srcImage.Height / currentPictureBox.Height;
+
             X = X < 0 ? 0 : X * srcImage.Width / currentPictureBox.Width;
             Y = Y < 0 ? 0 : Y * srcImage.Height / currentPictureBox.Height;
-            int Width = currentClipPanel.Width * srcImage.Width / currentPictureBox.Width;
-            int Height = currentClipPanel.Height * srcImage.Height / currentPictureBox.Height;
 
             // 创建新图位图
             Bitmap bitmap = new Bitmap(Width, Height);
@@ -634,10 +636,10 @@ namespace ImageEditer
             graphic.DrawImage(srcImage, 0, 0, cRect, GraphicsUnit.Pixel);
             graphic.Dispose();
 
-            Debug.WriteLine("SourceWidth===========>" + sourceImage.Width);
+            /*Debug.WriteLine("SourceWidth===========>" + sourceImage.Width);
             Debug.WriteLine("SourceHeight===========>" + sourceImage.Height);
             Debug.WriteLine("Width===========>" + bitmap.Width);
-            Debug.WriteLine("Height===========>" + bitmap.Height);
+            Debug.WriteLine("Height===========>" + bitmap.Height);*/
 
             //从作图区生成新图
             // currentPictureBox.Image = Image.FromHbitmap( bitmap.GetHbitmap() );
