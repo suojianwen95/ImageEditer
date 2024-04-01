@@ -28,7 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
             this.splitContainer = new System.Windows.Forms.SplitContainer();
             this.imageList = new System.Windows.Forms.Panel();
             this.imageContainer = new System.Windows.Forms.Panel();
@@ -42,9 +41,8 @@
             this.clip = new System.Windows.Forms.Button();
             this.mirror = new System.Windows.Forms.Button();
             this.ImageBox = new System.Windows.Forms.Panel();
-            this.clipPanel = new ImageEditer.ExtendedPanel();
             this.pictureBox = new System.Windows.Forms.PictureBox();
-            this.imageArray = new System.Windows.Forms.ImageList(this.components);
+            this.clipPanel = new ImageEditer.ExtendedPanel();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer)).BeginInit();
             this.splitContainer.Panel1.SuspendLayout();
             this.splitContainer.Panel2.SuspendLayout();
@@ -208,15 +206,6 @@
             this.ImageBox.Size = new System.Drawing.Size(713, 455);
             this.ImageBox.TabIndex = 5;
             // 
-            // clipPanel
-            // 
-            this.clipPanel.BackColor = System.Drawing.Color.Transparent;
-            this.clipPanel.Cursor = System.Windows.Forms.Cursors.Default;
-            this.clipPanel.Location = new System.Drawing.Point(80, 9);
-            this.clipPanel.Name = "clipPanel";
-            this.clipPanel.Size = new System.Drawing.Size(45, 41);
-            this.clipPanel.TabIndex = 1;
-            // 
             // pictureBox
             // 
             this.pictureBox.BackColor = System.Drawing.Color.Transparent;
@@ -228,11 +217,14 @@
             this.pictureBox.TabIndex = 0;
             this.pictureBox.TabStop = false;
             // 
-            // imageArray
+            // clipPanel
             // 
-            this.imageArray.ColorDepth = System.Windows.Forms.ColorDepth.Depth8Bit;
-            this.imageArray.ImageSize = new System.Drawing.Size(16, 16);
-            this.imageArray.TransparentColor = System.Drawing.Color.Transparent;
+            this.clipPanel.BackColor = System.Drawing.Color.Transparent;
+            this.clipPanel.Cursor = System.Windows.Forms.Cursors.Default;
+            this.clipPanel.Location = new System.Drawing.Point(80, 9);
+            this.clipPanel.Name = "clipPanel";
+            this.clipPanel.Size = new System.Drawing.Size(45, 41);
+            this.clipPanel.TabIndex = 1;
             // 
             // ImageEdit
             // 
@@ -272,7 +264,6 @@
         private System.Windows.Forms.Button rota90;
         private System.Windows.Forms.Button rota180;
         private System.Windows.Forms.Panel optPanel;
-        private System.Windows.Forms.ImageList imageArray;
     }
 }
 
