@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Diagnostics;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Security.Policy;
 using System.Text;
@@ -75,6 +76,8 @@ namespace ImageEditer
             this.mirror.Click += new System.EventHandler(this.mirror_Click);
             this.vertical.Click += new System.EventHandler(this.vertical_Click);
             this.clip.Click += new System.EventHandler(this.clip_Click);
+            this.textImport.Click += new System.EventHandler(this.import_Click);
+            this.exportImage.Click += new System.EventHandler(this.export_Click);
 
             currentPictureBox = pictureBox;
             currentPictureBox.Location = new Point(0, 0);
@@ -259,6 +262,26 @@ namespace ImageEditer
                 this.overPainting();
             }
 
+        }
+        // 插入文字
+        private void import_Click(object sender, EventArgs e)
+        {
+
+        }
+        // 导出图像
+        private void export_Click(object sender, EventArgs e)
+        {
+            SaveFileDialog savedialog = new SaveFileDialog();
+            savedialog.Filter = "Png 图片|*.png|Bmp 图片|*.bmp|Gif 图片|*.gif|Jpg 图片|*.jpg|Wmf  图片|*.wmf";
+            savedialog.FilterIndex = 0;
+            savedialog.RestoreDirectory = true; // 保存对话框是否记忆上次打开的目录
+            savedialog.CheckPathExists = true; // 检查目录
+            savedialog.FileName = System.DateTime.Now.ToString("yyyyMMddHHmmss"); // 设置默认文件名
+            if (savedialog.ShowDialog() == DialogResult.OK)
+            {
+                currentPictureBox.Image.Save(savedialog.FileName, System.Drawing.Imaging.ImageFormat.Png); // image为要保存的图片
+                MessageBox.Show(this, "图片保存成功！", "信息提示");
+            }
         }
         /************************图像鼠标事件**************************/
         private void pictureBox_MouseWheel(object sender, MouseEventArgs e)

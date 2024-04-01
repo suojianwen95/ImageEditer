@@ -217,7 +217,7 @@
             this.pictureBox.Location = new System.Drawing.Point(3, 6);
             this.pictureBox.Margin = new System.Windows.Forms.Padding(0);
             this.pictureBox.Name = "pictureBox";
-            this.pictureBox.Size = new System.Drawing.Size(59, 49);
+            this.pictureBox.Size = new System.Drawing.Size(32, 33);
             this.pictureBox.TabIndex = 0;
             this.pictureBox.TabStop = false;
             // 
@@ -245,7 +245,7 @@
             this.clipPanel.Cursor = System.Windows.Forms.Cursors.Default;
             this.clipPanel.Location = new System.Drawing.Point(80, 9);
             this.clipPanel.Name = "clipPanel";
-            this.clipPanel.Size = new System.Drawing.Size(45, 41);
+            this.clipPanel.Size = new System.Drawing.Size(27, 30);
             this.clipPanel.TabIndex = 1;
             // 
             // ImageEdit
