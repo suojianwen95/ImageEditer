@@ -42,6 +42,8 @@
             this.mirror = new System.Windows.Forms.Button();
             this.ImageBox = new System.Windows.Forms.Panel();
             this.pictureBox = new System.Windows.Forms.PictureBox();
+            this.textImport = new System.Windows.Forms.Button();
+            this.exportImage = new System.Windows.Forms.Button();
             this.clipPanel = new ImageEditer.ExtendedPanel();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer)).BeginInit();
             this.splitContainer.Panel1.SuspendLayout();
@@ -97,7 +99,7 @@
             this.imageContainer.ForeColor = System.Drawing.SystemColors.ControlText;
             this.imageContainer.Location = new System.Drawing.Point(0, 0);
             this.imageContainer.Name = "imageContainer";
-            this.imageContainer.Size = new System.Drawing.Size(713, 476);
+            this.imageContainer.Size = new System.Drawing.Size(717, 476);
             this.imageContainer.TabIndex = 0;
             // 
             // optPanel
@@ -106,6 +108,8 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.optPanel.BackColor = System.Drawing.Color.Gray;
             this.optPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.optPanel.Controls.Add(this.exportImage);
+            this.optPanel.Controls.Add(this.textImport);
             this.optPanel.Controls.Add(this.reset);
             this.optPanel.Controls.Add(this.rota180);
             this.optPanel.Controls.Add(this.rotaLeft);
@@ -116,7 +120,7 @@
             this.optPanel.Controls.Add(this.mirror);
             this.optPanel.Location = new System.Drawing.Point(0, 0);
             this.optPanel.Name = "optPanel";
-            this.optPanel.Size = new System.Drawing.Size(713, 26);
+            this.optPanel.Size = new System.Drawing.Size(718, 26);
             this.optPanel.TabIndex = 2;
             // 
             // reset
@@ -203,7 +207,7 @@
             this.ImageBox.Controls.Add(this.pictureBox);
             this.ImageBox.Location = new System.Drawing.Point(0, 23);
             this.ImageBox.Name = "ImageBox";
-            this.ImageBox.Size = new System.Drawing.Size(713, 455);
+            this.ImageBox.Size = new System.Drawing.Size(718, 455);
             this.ImageBox.TabIndex = 5;
             // 
             // pictureBox
@@ -216,6 +220,24 @@
             this.pictureBox.Size = new System.Drawing.Size(59, 49);
             this.pictureBox.TabIndex = 0;
             this.pictureBox.TabStop = false;
+            // 
+            // textImport
+            // 
+            this.textImport.Location = new System.Drawing.Point(558, 0);
+            this.textImport.Name = "textImport";
+            this.textImport.Size = new System.Drawing.Size(72, 23);
+            this.textImport.TabIndex = 10;
+            this.textImport.Text = "插入文字";
+            this.textImport.UseVisualStyleBackColor = true;
+            // 
+            // exportImage
+            // 
+            this.exportImage.Location = new System.Drawing.Point(633, 0);
+            this.exportImage.Name = "exportImage";
+            this.exportImage.Size = new System.Drawing.Size(70, 23);
+            this.exportImage.TabIndex = 11;
+            this.exportImage.Text = "导出图像";
+            this.exportImage.UseVisualStyleBackColor = true;
             // 
             // clipPanel
             // 
@@ -264,6 +286,8 @@
         private System.Windows.Forms.Button rota90;
         private System.Windows.Forms.Button rota180;
         private System.Windows.Forms.Panel optPanel;
+        private System.Windows.Forms.Button textImport;
+        private System.Windows.Forms.Button exportImage;
     }
 }
 
