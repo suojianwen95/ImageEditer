@@ -181,8 +181,8 @@ namespace ImageEditer
                     currentPictureBox.Height = (int)scaleHeight;
                 }
                 else {
-                    currentPictureBox.Width = currentPictureBox.Image.Width;
-                    currentPictureBox.Height = currentPictureBox.Image.Height;
+                    currentPictureBox.Width = imageWidth;
+                    currentPictureBox.Height = imageHeight;
                 }
             }
             else
@@ -194,8 +194,8 @@ namespace ImageEditer
                     currentPictureBox.Width = (int)scaleWidth;
                 }
                 else {
-                    currentPictureBox.Width = currentPictureBox.Image.Width;
-                    currentPictureBox.Height = currentPictureBox.Image.Height;
+                    currentPictureBox.Width = imageWidth;
+                    currentPictureBox.Height = imageHeight;
                 }
 
             }
