@@ -248,13 +248,15 @@ namespace ImageEditer
         {
             textMode = false;
             clipMode = !clipMode;
-            
+            this.textImport.BackColor = Color.Transparent;
+            this.textImport.ForeColor = Color.Black;
+            this.overDrawing();
+
             if (clipMode)
             {
                 this.clip.BackColor = Color.Blue;
                 this.clip.ForeColor = Color.White;
                 this.beginPainting();
-
             }
             else 
             {
@@ -267,7 +269,24 @@ namespace ImageEditer
         // 插入文字
         private void import_Click(object sender, EventArgs e)
         {
-            textMode = true;
+            textMode = !textMode;
+            clipMode = false;
+            this.clip.BackColor = Color.Transparent;
+            this.clip.ForeColor = Color.Black;
+            this.overPainting();
+
+            if (textMode)
+            {
+                this.textImport.BackColor = Color.Blue;
+                this.textImport.ForeColor = Color.White;
+                this.beginDrawing();
+            }
+            else
+            {
+                this.textImport.BackColor = Color.Transparent;
+                this.textImport.ForeColor = Color.Black;
+                this.overDrawing();
+            }
         }
         // 导出图像
         private void export_Click(object sender, EventArgs e)
@@ -574,6 +593,20 @@ namespace ImageEditer
             clipBitmap();
             currentClipPanel.Visible = clipMode;
         }
+        /***
+         * 绘制输入框
+         */ 
+        private void beginDrawing() 
+        { 
+        
+        }
+        /***
+         * 结束绘制
+         */
+        private void overDrawing()
+        {
+
+        }
         /**
          * 初始化裁切框调整按钮到图像尺寸
          */
@@ -616,7 +649,7 @@ namespace ImageEditer
             int Y = currentClipPanel.Location.Y - currentPictureBox.Location.Y;
 
             int crossWidth = X < 0 ? currentClipPanel.Width + X: currentClipPanel.Width;
-            int crossHeight = Y < 0 ? currentClipPanel.Height + Y : currentClipPanel.Width;
+            int crossHeight = Y < 0 ? currentClipPanel.Height + Y : currentClipPanel.Height;
 
             int Width = crossWidth * srcImage.Width / currentPictureBox.Width;
             int Height = crossHeight * srcImage.Height / currentPictureBox.Height;

@@ -32,6 +32,8 @@
             this.imageList = new System.Windows.Forms.Panel();
             this.imageContainer = new System.Windows.Forms.Panel();
             this.optPanel = new System.Windows.Forms.Panel();
+            this.exportImage = new System.Windows.Forms.Button();
+            this.textImport = new System.Windows.Forms.Button();
             this.reset = new System.Windows.Forms.Button();
             this.rota180 = new System.Windows.Forms.Button();
             this.rotaLeft = new System.Windows.Forms.Button();
@@ -41,10 +43,8 @@
             this.clip = new System.Windows.Forms.Button();
             this.mirror = new System.Windows.Forms.Button();
             this.ImageBox = new System.Windows.Forms.Panel();
-            this.pictureBox = new System.Windows.Forms.PictureBox();
-            this.textImport = new System.Windows.Forms.Button();
-            this.exportImage = new System.Windows.Forms.Button();
             this.clipPanel = new ImageEditer.ExtendedPanel();
+            this.pictureBox = new System.Windows.Forms.PictureBox();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer)).BeginInit();
             this.splitContainer.Panel1.SuspendLayout();
             this.splitContainer.Panel2.SuspendLayout();
@@ -99,7 +99,7 @@
             this.imageContainer.ForeColor = System.Drawing.SystemColors.ControlText;
             this.imageContainer.Location = new System.Drawing.Point(0, 0);
             this.imageContainer.Name = "imageContainer";
-            this.imageContainer.Size = new System.Drawing.Size(717, 476);
+            this.imageContainer.Size = new System.Drawing.Size(715, 476);
             this.imageContainer.TabIndex = 0;
             // 
             // optPanel
@@ -120,8 +120,26 @@
             this.optPanel.Controls.Add(this.mirror);
             this.optPanel.Location = new System.Drawing.Point(0, 0);
             this.optPanel.Name = "optPanel";
-            this.optPanel.Size = new System.Drawing.Size(718, 26);
+            this.optPanel.Size = new System.Drawing.Size(716, 26);
             this.optPanel.TabIndex = 2;
+            // 
+            // exportImage
+            // 
+            this.exportImage.Location = new System.Drawing.Point(633, 0);
+            this.exportImage.Name = "exportImage";
+            this.exportImage.Size = new System.Drawing.Size(70, 23);
+            this.exportImage.TabIndex = 11;
+            this.exportImage.Text = "导出图像";
+            this.exportImage.UseVisualStyleBackColor = true;
+            // 
+            // textImport
+            // 
+            this.textImport.Location = new System.Drawing.Point(558, 0);
+            this.textImport.Name = "textImport";
+            this.textImport.Size = new System.Drawing.Size(72, 23);
+            this.textImport.TabIndex = 10;
+            this.textImport.Text = "插入文字";
+            this.textImport.UseVisualStyleBackColor = true;
             // 
             // reset
             // 
@@ -207,8 +225,16 @@
             this.ImageBox.Controls.Add(this.pictureBox);
             this.ImageBox.Location = new System.Drawing.Point(0, 23);
             this.ImageBox.Name = "ImageBox";
-            this.ImageBox.Size = new System.Drawing.Size(718, 455);
+            this.ImageBox.Size = new System.Drawing.Size(716, 455);
             this.ImageBox.TabIndex = 5;
+            // 
+            // clipPanel
+            // 
+            this.clipPanel.BackColor = System.Drawing.Color.Transparent;
+            this.clipPanel.Location = new System.Drawing.Point(80, 9);
+            this.clipPanel.Name = "clipPanel";
+            this.clipPanel.Size = new System.Drawing.Size(27, 30);
+            this.clipPanel.TabIndex = 1;
             // 
             // pictureBox
             // 
@@ -220,32 +246,6 @@
             this.pictureBox.Size = new System.Drawing.Size(32, 33);
             this.pictureBox.TabIndex = 0;
             this.pictureBox.TabStop = false;
-            // 
-            // textImport
-            // 
-            this.textImport.Location = new System.Drawing.Point(558, 0);
-            this.textImport.Name = "textImport";
-            this.textImport.Size = new System.Drawing.Size(72, 23);
-            this.textImport.TabIndex = 10;
-            this.textImport.Text = "插入文字";
-            this.textImport.UseVisualStyleBackColor = true;
-            // 
-            // exportImage
-            // 
-            this.exportImage.Location = new System.Drawing.Point(633, 0);
-            this.exportImage.Name = "exportImage";
-            this.exportImage.Size = new System.Drawing.Size(70, 23);
-            this.exportImage.TabIndex = 11;
-            this.exportImage.Text = "导出图像";
-            this.exportImage.UseVisualStyleBackColor = true;
-            // 
-            // clipPanel
-            // 
-            this.clipPanel.BackColor = System.Drawing.Color.Transparent;
-            this.clipPanel.Location = new System.Drawing.Point(80, 9);
-            this.clipPanel.Name = "clipPanel";
-            this.clipPanel.Size = new System.Drawing.Size(27, 30);
-            this.clipPanel.TabIndex = 1;
             // 
             // ImageEdit
             // 
