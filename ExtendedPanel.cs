@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -34,6 +35,21 @@ namespace ImageEditer
                 this.opacity = value;
             }
         }
+
+        private string mode = "default";
+        [DefaultValue("default")]
+        public string Mode
+        {
+            get
+            {
+                return this.mode;
+            }
+            set
+            {
+                this.mode = value;
+            }
+        }
+
         protected override CreateParams CreateParams
         {
             get
@@ -43,15 +59,20 @@ namespace ImageEditer
                 return cp;
             }
         }
+
         protected override void OnPaint(PaintEventArgs e)
         {
             using (var brush = new SolidBrush(Color.FromArgb(this.opacity * 255 / 100, this.BackColor)))
             {
+                Pen p = new Pen(Color.Red, 2);
+                if (this.mode == "text") {
+                    p.DashStyle = DashStyle.Dot;
+                }
+
                 e.Graphics.FillRectangle(brush, this.ClientRectangle);
-                e.Graphics.DrawRectangle(new Pen(Color.Red, 2), this.ClientRectangle);
+                e.Graphics.DrawRectangle(p, this.ClientRectangle);
             }
             base.OnPaint(e);
         }
-
     }
 }

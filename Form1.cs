@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Diagnostics;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.IO;
 using System.Linq;
 using System.Security.Policy;
@@ -18,12 +19,10 @@ namespace ImageEditer
     public partial class ImageEdit : Form
     {
         private static int rotaNum = 0; // 旋转角度
-        private static float zoomNum = 1.0f; // 缩放比例 未使用
         private static int pointRadis = 12; // 裁切点大小
         private static Boolean clipMode = false; // 是否开启裁切
         private static Boolean textMode = false; // 是否开启标注
 
-        private static Pen rotaPen = new Pen(Color.Blue, 10); // 旋转颜色 未使用
         private static Pen clipPen = new Pen(Color.Red, 10); // 裁切颜色
 
         private static string imagePath = null; // 图像路径
@@ -33,6 +32,8 @@ namespace ImageEditer
         private static PictureBox currentPictureBox = null; // 当前图像容器
         private static Panel currentImageBox = null; // 当前图像panel
         private static Panel currentClipPanel = null; // 裁切平面
+       
+        private static ExtendedTextPanel currentInputPanel = null; // 文字输入框
 
         private static Point one = new Point(0, 0);  // 裁切调整坐标1
         private static Point two = new Point(0, 0);  // 裁切调整坐标2
@@ -48,6 +49,7 @@ namespace ImageEditer
 
         public Point mouseDownPoint; // 记录鼠标点击坐标
         public bool isSelected = false; // 是否点击图像
+        public bool isDrawing = false; // 是否点击图像
         public bool isClicked = false; // 是否点击裁切矩形
         public bool isClickedOne = false; // 是否点解裁切矩形调整点1
         public bool isClickedTwo = false; // 是否点解裁切矩形调整点2
@@ -246,12 +248,14 @@ namespace ImageEditer
         // 裁切
         private void clip_Click(object sender, EventArgs e)
         {
-            textMode = false;
+            
             clipMode = !clipMode;
-            this.textImport.BackColor = Color.Transparent;
-            this.textImport.ForeColor = Color.Black;
-            this.overDrawing();
-
+            if (textMode) {
+                textMode = false;
+                this.textImport.BackColor = Color.Transparent;
+                this.textImport.ForeColor = Color.Black;
+            }
+       
             if (clipMode)
             {
                 this.clip.BackColor = Color.Blue;
@@ -270,22 +274,22 @@ namespace ImageEditer
         private void import_Click(object sender, EventArgs e)
         {
             textMode = !textMode;
-            clipMode = false;
-            this.clip.BackColor = Color.Transparent;
-            this.clip.ForeColor = Color.Black;
-            this.overPainting();
+
+            if (clipMode) {
+                this.clip.BackColor = Color.Transparent;
+                this.clip.ForeColor = Color.Black;
+                this.overPainting();
+            }
 
             if (textMode)
             {
                 this.textImport.BackColor = Color.Blue;
                 this.textImport.ForeColor = Color.White;
-                this.beginDrawing();
             }
             else
             {
                 this.textImport.BackColor = Color.Transparent;
                 this.textImport.ForeColor = Color.Black;
-                this.overDrawing();
             }
         }
         // 导出图像
@@ -339,37 +343,110 @@ namespace ImageEditer
         }
         private void pictureBox_MouseDown(object sender, MouseEventArgs e)
         {
+            if (currentImageBox != null) {
+                currentImageBox.Focus();
+            }
+          
             if (e.Button == MouseButtons.Left)
             {
                 if (textMode)
                 {
+                    mouseDownPoint.X = e.Location.X;
+                    mouseDownPoint.Y = e.Location.Y;
                     Cursor.Current = Cursors.Cross;
+                    isDrawing = true;
+                    this.addTextInput(e);
                 }
                 else {
-                    Cursor.Current = Cursors.SizeAll;
                     mouseDownPoint.X = Cursor.Position.X;
                     mouseDownPoint.Y = Cursor.Position.Y;
+                    Cursor.Current = Cursors.SizeAll;
                     isSelected = true; 
                 }
             }
         }
         private void pictureBox_MouseMove(object sender, MouseEventArgs e)
         {
-            if (textMode) { 
-               
+            if (isDrawing) {
+                this.resizeTextInput(e);
+                mouseDownPoint.X = e.Location.X;
+                mouseDownPoint.Y = e.Location.Y;
             }
             else if (isSelected)
             {
                 currentPictureBox.Left = currentPictureBox.Left + (Cursor.Position.X - mouseDownPoint.X);
                 currentPictureBox.Top = currentPictureBox.Top + (Cursor.Position.Y - mouseDownPoint.Y);
+
                 mouseDownPoint.X = Cursor.Position.X;
                 mouseDownPoint.Y = Cursor.Position.Y;  
             }
         }
         private void pictureBox_MouseUp(object sender, MouseEventArgs e)
         {
+            if (textMode) {
+                this.importTextInput();
+            }
             isSelected = false;
-            textMode = false;
+            isDrawing = false;
+        }
+        /*************************添加输入框*************************/
+        private void addTextInput(MouseEventArgs e) {
+
+            Debug.WriteLine("addTextInput");
+            ExtendedTextPanel inputPanel = new ExtendedTextPanel();
+            currentInputPanel = inputPanel;
+            currentInputPanel.Opacity = 0;
+            currentInputPanel.Mode = "text";
+            currentPictureBox.Controls.Add(inputPanel);
+            currentInputPanel.Size = new Size(0, 0);
+            currentInputPanel.Location = new Point(e.Location.X, e.Location.Y);
+        }
+        private void resizeTextInput(MouseEventArgs e) {
+            if (currentInputPanel != null)
+            {
+                int dtW = e.Location.X - mouseDownPoint.X;
+                int dtH = e.Location.Y - mouseDownPoint.Y;
+                currentInputPanel.Width += dtW;
+                currentInputPanel.Height += dtH;
+            }
+        }
+        private void importTextInput() {
+            
+            if (currentInputPanel == null) {
+                return;
+            }
+            // 太小的不创建
+            if (currentInputPanel.Width < 10 || currentInputPanel.Height < 10)
+            {
+                currentPictureBox.Controls.Remove(currentInputPanel);
+                currentInputPanel = null;
+                return;
+            }
+
+            Debug.WriteLine("importTextInput");
+            currentInputPanel.showTransTextBox();
+           
+            // currentInputPanel.LostFocus += new EventHandler(txt_LostFocus); //失去焦点后发生事件
+            // textBox.GotFocus += new EventHandler(txt_GotFocus);  //获取焦点前发生事件
+            // textBox.MouseClick += new MouseEventHandler(txt_MouseClick); // 鼠标点击事件
+        }
+
+        private void txt_LostFocus(object sender, EventArgs e)
+        {
+            Debug.WriteLine("txt_LostFocus");
+            TransTextBox textBox = (TransTextBox)sender;
+
+        }
+        private void txt_GotFocus(object sender, EventArgs e)
+        {
+            Debug.WriteLine("txt_GotFocus");
+            TransTextBox textBox = (TransTextBox)sender;
+            ExtendedPanel inputPanel = (ExtendedPanel)textBox.Parent;
+        }
+        private void txt_MouseClick(object sender, EventArgs e)
+        {
+            Debug.WriteLine("txt_MouseClick");
+            TransTextBox textBox = (TransTextBox)sender;
         }
         /*************************裁切平面鼠标事件*************************/
         private void clip_MouseDown(object sender, MouseEventArgs e)
@@ -592,20 +669,6 @@ namespace ImageEditer
             // 裁切
             clipBitmap();
             currentClipPanel.Visible = clipMode;
-        }
-        /***
-         * 绘制输入框
-         */ 
-        private void beginDrawing() 
-        { 
-        
-        }
-        /***
-         * 结束绘制
-         */
-        private void overDrawing()
-        {
-
         }
         /**
          * 初始化裁切框调整按钮到图像尺寸
