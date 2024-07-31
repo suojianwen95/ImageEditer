@@ -58,7 +58,7 @@ namespace ImageEditer
 
         public ImageEdit(){
            InitializeComponent();
-           imagePath = @"D:\1.jpg";
+           imagePath = @"D:\0.jpg";
            this.init(this.ImageBox, this.pictureBox, imagePath);
         }
         /**
@@ -210,8 +210,11 @@ namespace ImageEditer
         // 复位
         private void reset_Click(object sender, EventArgs e)
         {
-            rotaNum = 0;
-            resetImageToPanel(); 
+            if (!clipMode) {
+                rotaNum = 0;
+                currentPictureBox.Image = RotateImage(sourceImage, rotaNum);
+                resetImageToPanel();
+            }
         }
         // 左旋
         private void roatleft_Click(object sender, EventArgs e)
@@ -310,7 +313,7 @@ namespace ImageEditer
         /************************图像鼠标事件**************************/
         private void pictureBox_MouseWheel(object sender, MouseEventArgs e)
         {
-            if (currentPictureBox.ClientRectangle.Contains(e.Location))
+            if (!clipMode && currentPictureBox.ClientRectangle.Contains(e.Location))
             {
                 ((HandledMouseEventArgs)e).Handled = true;
                 currentPictureBox.Focus();
@@ -343,42 +346,50 @@ namespace ImageEditer
         }
         private void pictureBox_MouseDown(object sender, MouseEventArgs e)
         {
-            if (currentImageBox != null) {
-                currentImageBox.Focus();
-            }
-          
-            if (e.Button == MouseButtons.Left)
-            {
-                if (textMode)
+            if (!clipMode) {
+                if (currentImageBox != null)
                 {
-                    mouseDownPoint.X = e.Location.X;
-                    mouseDownPoint.Y = e.Location.Y;
-                    Cursor.Current = Cursors.Cross;
-                    isDrawing = true;
-                    this.addTextInput(e);
+                    currentImageBox.Focus();
                 }
-                else {
-                    mouseDownPoint.X = Cursor.Position.X;
-                    mouseDownPoint.Y = Cursor.Position.Y;
-                    Cursor.Current = Cursors.SizeAll;
-                    isSelected = true; 
+
+                if (e.Button == MouseButtons.Left)
+                {
+                    if (textMode)
+                    {
+                        mouseDownPoint.X = e.Location.X;
+                        mouseDownPoint.Y = e.Location.Y;
+                        Cursor.Current = Cursors.Cross;
+                        isDrawing = true;
+                        this.addTextInput(e);
+                    }
+                    else
+                    {
+                        mouseDownPoint.X = Cursor.Position.X;
+                        mouseDownPoint.Y = Cursor.Position.Y;
+                        Cursor.Current = Cursors.SizeAll;
+                        isSelected = true;
+                    }
                 }
             }
         }
         private void pictureBox_MouseMove(object sender, MouseEventArgs e)
         {
-            if (isDrawing) {
-                this.resizeTextInput(e);
-                mouseDownPoint.X = e.Location.X;
-                mouseDownPoint.Y = e.Location.Y;
-            }
-            else if (isSelected)
+            if (!clipMode)
             {
-                currentPictureBox.Left = currentPictureBox.Left + (Cursor.Position.X - mouseDownPoint.X);
-                currentPictureBox.Top = currentPictureBox.Top + (Cursor.Position.Y - mouseDownPoint.Y);
+                if (isDrawing)
+                {
+                    this.resizeTextInput(e);
+                    mouseDownPoint.X = e.Location.X;
+                    mouseDownPoint.Y = e.Location.Y;
+                }
+                else if (isSelected)
+                {
+                    currentPictureBox.Left = currentPictureBox.Left + (Cursor.Position.X - mouseDownPoint.X);
+                    currentPictureBox.Top = currentPictureBox.Top + (Cursor.Position.Y - mouseDownPoint.Y);
 
-                mouseDownPoint.X = Cursor.Position.X;
-                mouseDownPoint.Y = Cursor.Position.Y;  
+                    mouseDownPoint.X = Cursor.Position.X;
+                    mouseDownPoint.Y = Cursor.Position.Y;
+                }
             }
         }
         private void pictureBox_MouseUp(object sender, MouseEventArgs e)
